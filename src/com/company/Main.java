@@ -2,73 +2,49 @@ package com.company;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 
 public class Main {
-
     public static void main(String[] args) {
         StringBuilder sb = new StringBuilder();
-
-        String[] namesDir = new String[]{"src", "res", "savegames", "temp"};
-        for (int i = 0; i < 4; i++) {
-            File file = new File("C://Games//" + namesDir[i]);
-            if (!file.exists()) {
-                if (file.mkdir()) {
-                    sb.append(namesDir[i] + " directory is created!\n");
-                } else {
-                    sb.append("Failed to create " + namesDir[i] + " directory!\n");
-                }
-            } else {
-                sb.append(namesDir[i] + " directory is already exist!\n");
-            }
-        }
-        String[] namesSrcDir = new String[]{"main", "test"};
-        for (int i = 0; i < 2; i++) {
-            File file = new File("C://Games/src/" + namesSrcDir[i]);
-            if (!file.exists()) {
-                if (file.mkdir()) {
-                    sb.append(namesSrcDir[i] + " directory is created!\n");
-                } else {
-                    sb.append("Failed to create " + namesSrcDir[i] + " directory!\n");
-                }
-            } else {
-                sb.append(namesSrcDir[i] + " directory is already exist!\n");
-            }
-        }
-        String[] namesResDir = new String[]{"drawables", "vectors", "icons"};
-        for (int i = 0; i < 3; i++) {
-            File file = new File("C://Games/res/" + namesResDir[i]);
-            if (!file.exists()) {
-                if (file.mkdir()) {
-                    sb.append(namesResDir[i] + " directory is created!\n");
-                } else {
-                    sb.append("Failed to create " + namesResDir[i] + " directory!\n");
-                }
-            } else {
-                sb.append(namesResDir[i] + " directory is already exist!\n");
-            }
-        }
+        makeDir(new String[]{"src", "res", "savegames", "temp"}, sb, "C://Games/");
+        makeDir(new String[]{"main", "test"}, sb, "C://Games/src/");
+        makeDir(new String[]{"drawables", "vectors", "icons"}, sb, "C://Games/res/");
         try {
-            String[] fileMain = new String[]{"Main.java", "Utils.java"};
-            for (int i = 0; i < 2; i++) {
-                File file = new File("C://Games/src/main/" + fileMain[i]);
-                if (file.createNewFile())
-                    sb.append("File " + fileMain[i] + " is created!\n");
-                else
-                    sb.append("File " + fileMain[i] + "is already exists!\n");
-            }
-
-            File file = new File("C:/Games/temp/temp.txt");
-            if (file.createNewFile())
-                sb.append("File temp.txt is created!\n");
-            else
-                sb.append("File temp.txt is already exists!\n");
-            FileWriter writer = new FileWriter(file);
+            makeFile(new String[]{"Main.java", "Utils.java"}, sb, "C://Games/src/main/");
+            makeFile(new String[]{"temp.txt"}, sb, "C:/Games/temp/");
+            FileWriter writer = new FileWriter("C:/Games/temp/temp.txt");
             writer.write(String.valueOf(sb));
             writer.close();
         } catch (Exception e) {
             sb.append(e);
         }
         System.out.println(sb);
+    }
+
+    public static void makeDir(String[] names, StringBuilder log, String path) {
+        for (String dir : names) {
+            File file = new File(path + dir);
+            if (!file.exists()) {
+                if (file.mkdir()) {
+                    log.append(dir + " directory is created!\n");
+                } else {
+                    log.append("Failed to create " + dir + " directory!\n");
+                }
+            } else {
+                log.append(dir + " directory is already exist!\n");
+            }
+        }
+    }
+
+    public static void makeFile(String[] fileName, StringBuilder log, String path) throws IOException {
+        for (String files : fileName) {
+            File file = new File(path + files);
+            if (file.createNewFile())
+                log.append("File " + files + " is created!\n");
+            else
+                log.append("File " + files + "is already exists!\n");
+        }
     }
 }
 
